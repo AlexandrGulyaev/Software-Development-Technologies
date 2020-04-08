@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Xml.Serialization;
 
 namespace Gulyaev_AG_2
 {
-    abstract class Figure
+    [Serializable]
+    [XmlIncludeAttribute(typeof(Circle)), XmlIncludeAttribute(typeof(Triangle)), XmlIncludeAttribute(typeof(Rectangle))]
+    public abstract class Figure
     {
         public abstract string Type();
         public abstract double Perimeter();
@@ -17,19 +21,32 @@ namespace Gulyaev_AG_2
         /// </summary>
         public void ShowInfo()
         {
+            Trace.WriteLine("Вывод информации о фигуре");
+            Trace.Indent();
             Console.WriteLine(
                 $"Тип фигуры: {Type()}\n" +
                 $"Площадь: {Area()}\n" +
                 $"Периметр: {Perimeter()}"
             );
+            Trace.Unindent();
             Console.WriteLine();
         }
     }
 
-    class Rectangle : Figure
+    [Serializable]
+    public class Rectangle : Figure
     {
         private double l; // Длина прямоугольника
         private double h; // Высота прямоугольника
+
+        public override string Type()
+        {
+            Trace.WriteLine("Идентификация типа фигуры - прямоугольник");
+            return ("Rectangle");
+        }
+
+        public Rectangle()
+        {  }
 
         /// <summary>
         /// Объявление прямоугольника
@@ -40,6 +57,7 @@ namespace Gulyaev_AG_2
         {
             l = recLength < 0 ? -recLength : recLength;
             h = recHeight < 0 ? -recHeight : recHeight;
+            Trace.WriteLine("Создание прямоугольника с длиной " + l + " и высотой " + h);
         }
 
         /// <summary>
@@ -47,6 +65,7 @@ namespace Gulyaev_AG_2
         /// </summary>
         public override double Area()
         {
+            Trace.WriteLine("Вычисление площади прямоугольника");
             return (l * h);
         }
 
@@ -55,18 +74,24 @@ namespace Gulyaev_AG_2
         /// </summary>
         public override double Perimeter()
         {
+            Trace.WriteLine("Вычисление периметра прямоугольника");
             return (2 * (l + h));
-        }
-
-        public override string Type()
-        {
-            return ("Rectangle");
         }
     }
 
-    class Circle : Figure
+    [Serializable]
+    public class Circle : Figure
     {
         private double r; // Радиус окружности
+
+        public override string Type()
+        {
+            Trace.WriteLine("Идентификация типа фигуры - окружность");
+            return ("Circle");
+        }
+
+        public Circle()
+        {  }
 
         /// <summary>
         /// Объявление окружности
@@ -75,6 +100,7 @@ namespace Gulyaev_AG_2
         public Circle(double cirRadius)
         {
             r = cirRadius < 0 ? -cirRadius : cirRadius;
+            Trace.WriteLine("Создание окружности радиуса " + r);
         }
 
         /// <summary>
@@ -82,6 +108,7 @@ namespace Gulyaev_AG_2
         /// </summary>
         public override double Area()
         {
+            Trace.WriteLine("Вычисление площади окружности");
             return (Math.PI * r * r);
         }
 
@@ -90,18 +117,24 @@ namespace Gulyaev_AG_2
         /// </summary>
         public override double Perimeter()
         {
+            Trace.WriteLine("Вычисление периметра окружности");
             return (2 * Math.PI * r);
-        }
-
-        public override string Type()
-        {
-            return ("Circle");
         }
     }
 
-    class Triangle : Figure
+    [Serializable]
+    public class Triangle : Figure
     {
         private double a, b, c; // Стороны треугольника
+
+        public override string Type()
+        {
+            Trace.WriteLine("Идентификация типа фигуры - треугольник");
+            return ("Triangle");
+        }
+
+        public Triangle()
+        {  }
 
         /// <summary>
         /// Объявление треугольника по трем сторонам
@@ -114,6 +147,7 @@ namespace Gulyaev_AG_2
             a = trA < 0 ? -trA : trA;
             b = trB < 0 ? -trB : trB;
             c = trC < 0 ? -trC : trC;
+            Trace.WriteLine("Создание треугольника со сторонами " + a + ", " + b + ", " + c);
         }
 
         /// <summary>
@@ -121,6 +155,7 @@ namespace Gulyaev_AG_2
         /// </summary>
         public override double Area()
         {
+            Trace.WriteLine("Вычисление площади треугольника");
             double p = (a + b + c) / 2; // Полупериметр
             return (Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
         }
@@ -130,12 +165,8 @@ namespace Gulyaev_AG_2
         /// </summary>
         public override double Perimeter()
         {
+            Trace.WriteLine("Вычисление периметра треугольника");
             return (a + b + c);
-        }
-
-        public override string Type()
-        {
-            return ("Triangle");
         }
     }
 }

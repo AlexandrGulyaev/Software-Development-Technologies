@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
+using System.Xml.Serialization;
 
 namespace Gulyaev_AG_2
 {
@@ -20,7 +22,9 @@ namespace Gulyaev_AG_2
             {
                 sr.ReadLine();
                 List<Figure> figures = new List<Figure>();
-                
+
+                Trace.WriteLine("Начало трассировки");
+
                 for (int k = 0; k < n; k++)
                 {
                     // Считывание строки с параметрами фигуры
@@ -30,6 +34,8 @@ namespace Gulyaev_AG_2
                     // Добавление в список информации о соответствующей фигуре
                     try
                     {
+                        Trace.WriteLine("Объявление фигуры " + (k + 1));
+                        Trace.Indent();
                         switch (form.ToLower())
                         {
                             case "rectangle":
@@ -47,6 +53,7 @@ namespace Gulyaev_AG_2
                                 figures.Add(circle);
                                 break;
                         }
+                        Trace.Unindent();
                     }
                     catch (System.FormatException)
                     {
@@ -79,10 +86,16 @@ namespace Gulyaev_AG_2
                     }
                     else
                     {
+                        Trace.Indent();
+                        TextWriter serialWriter = new StreamWriter("figures.xml");
+                        XmlSerializer ser = new XmlSerializer(typeof(Figure));
                         for (int k = 0; k < n; k++)
                         {
+                            Trace.WriteLine("");
                             figures[k].ShowInfo();
+                            ser.Serialize(serialWriter, figures[k]);
                         }
+                        Trace.Unindent();
                     }
                 }
                 catch (System.FormatException)
